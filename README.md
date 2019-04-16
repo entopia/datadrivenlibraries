@@ -1,4 +1,4 @@
-<img src="media/DDL.jpg" width="250" height="150" />
+<img src="media/DDL.jpg" width="180" height="100" />
 <!-- ![London](media/DDL.jpg )-->
 
 # An online dashboard for Libraries in the UK
