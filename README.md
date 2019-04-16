@@ -1,6 +1,6 @@
 # Data-Driven Libraries
 
-![London](media/DDL.jpg)
+![London](media/DDL.jpg = 250x250)
 
 The Alan Turing Institute and the British Library have an ambition to develop a collaborative work in the area of data analysis for Libraries. The first step is to broaden our understanding of the UK libraries system by deploying spatial data analysis, as well as the analysis of the libraries’ key functions. 
 
