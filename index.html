@@ -186,7 +186,11 @@
 				type: 'geojson',
                   data: './PublicLibrariesUK.geojson' // replace this with the url of your own geojson
 			  },
-			  maxzoom: 15,
+            maxzoom: 15,
+
+            'layout': {
+                'visibility': 'none'
+            },
 			  paint: {
 				// increase weight as diameter breast height increases
 				'heatmap-weight': {
