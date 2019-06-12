@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Libraries in the UK</title>
+	<meta name = 'viewport' content='initial-scale=1, maximum-scale=1,user-scalable=no'/>
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+	 <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+
+
+<style>
+	body {
+	  margin: 0;
+	  padding: 0;
+	  font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+	}
+
+	#map {
+	  position: absolute;
+	  top: 0;
+	  bottom: 0;
+	  width: 100%;
+	}
+
+	h1 {
+	  font-size: 20px;
+	  line-height: 30px;
+	}
+
+	h2 {
+	  font-size: 14px;
+	  line-height: 20px;
+	  margin-bottom: 10px;
+	}
+
+	a {
+	  text-decoration: none;
+	  color: #2dc4b2;
+	}
+
+	#console {
+	  position: absolute;
+	  width: 240px;
+	  margin: 10px;
+	  padding: 10px 20px;
+	  background-color: white;
+	}
+
+
+	.session {
+	  margin-bottom: 20px;
+	}
+
+	.row {
+	  height: 12px;
+	  width: 100%;
+	}
+
+	.colors {
+	  background: linear-gradient(to right, #2dc4b2, #3bb3c3, #669ec4, #8b88b6, #a2719b, #aa5e79);
+	  margin-bottom: 5px;
+	}
+
+	.label {
+	  width: 15%;
+	  display: inline-block;
+	  text-align: center;
+}
+
+</style>
+
+
+<body>
+	<div id='map'></div>
+	<div id='console'>
+		<h1>Libraries in the UK</h1>
+		<p>Data: <a href='https://data.gov.uk/dataset/782d6528-11bd-4ae0-ae47-63b456c84e76/public-libraries-in-england-basic-dataset'>Public libraries in England</a> in UK, Jul 2016</p>
+		  <div class='session'>
+		  <h2>Size of Libraries</h2> <!--casualties-->
+		  <div class='row colors'>
+		  </div>
+		  <div class='row labels'>
+			<div class='label'>0</div>
+			<div class='label'>1</div>
+			<div class='label'>2</div>
+			<div class='label'>3</div>
+			<div class='label'>4</div>
+			<div class='label'>5+</div>
+		  </div>
+		</div>
+
+		<div class='session' id='sliderbar'>
+            <h2>Year: <label id='active-hour'>2016</label></h2>
+		    <!-- <h2>Hour: <label id='active-hour'>12PM</label></h2> -->
+		    <input id='slider' class='row' type='range' min='2011' max='2016' step='4' value='2016' />
+
+		    <div class='session'>
+		      <h2>Day of the week</h2>
+		      <div class='row' id='filters'>
+			    <input id='all' type='radio' name='toggle' value='all' checked='checked'>
+			    <label for='all'>All</label>
+			    <input id='weekday' type='radio' name='toggle' value='weekday'>
+			    <label for='weekday'>Weekday</label>
+			    <input id='weekend' type='radio' name='toggle' value='weekend'>
+			    <label for='weekend'>Weekend</label>
+		  </div>
+		</div>
+
+		<div class='session'>
+		  <h2>Type of visualisation</h2>
+		  <div class='row' id='onoff'>
+			<input id='pointdata' type='radio' name='toggle1' value='pointdata'  checked='checked'>
+			<label for='pointdata'>Pointdata</label>
+			<input id='heatmap' type='radio' name='toggle1' value='heatmap'>
+			<label for='heatmap'>Heatmap</label>
+		  </div>
+		</div>
+
+</div>
+	
+	
+	</div>
+	
+</body>
+
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZmxvcmEtcnQiLCJhIjoiY2pqNnlmaWI5MXVpODN2bGtva3BsNGh3OSJ9.QDJnZmcBABY0ZXDGrmk-vQ';
+	var map = new mapboxgl.Map({
+	  container: 'map', // container element id
+	  style: 'mapbox://styles/mapbox/light-v9',
+        center: [-2.58004, 52.9102327], // initial map center in [lon, lat]
+	  zoom: 6
+    });
+
+
+
+</script>
+
+
+<script>
+	var filterHour = ['==', ['number', ['get', 'Hour']], 12];
+	var filterDay = ['!=', ['string', ['get', 'Day']], 'placeholder'];
+	map.on('load', function() {
+		map.addLayer({
+			
+		  id: 'collisions',
+		  type: 'circle',
+		  source: {
+			type: 'geojson',
+              data: './PublicLibrariesUK.geojson' // replace this with the url of your own geojson
+		  },
+		  
+		  //filter: ['all', filterHour, filterDay]
+		  paint: {
+			'circle-radius': [
+			  'interpolate',
+                ['linear'],
+                ["zoom"], //data to visualise// we put zoom here so that its relevant to the zoom value and put the data in teh maximum bullet size.
+                0, 2, 9000, ['number', ['get', 'Added geom']]  // (min value of data, min value of map scale, maximum value of data, maximum value of map scale)
+			],
+			'circle-color': [
+			  'interpolate',
+			  ['linear'],
+                ['number', ['get', 'Added geom']],
+
+                0, "#fc9272", //'#2DC4B2',
+                500, "#fb6a4a", //'#3BB3C3',
+                1000, "#ef3b2c",//'#669EC4',
+                1500, "#cb181d", //'#8B88B6',
+                2000, "#a50f15",//'#A2719B',
+                3000, "#67000d"//'#AA5E79'
+			],
+			'circle-opacity': 0.8
+		  }
+		  
+		}, 
+		'admin-2-boundaries-dispute', );
+		
+		map.addLayer({
+			id: 'collisionsheatmap',
+			  type: 'heatmap',
+			  source: {
+				type: 'geojson',
+                  data: './PublicLibrariesUK.geojson' // replace this with the url of your own geojson
+			  },
+			  maxzoom: 15,
+			  paint: {
+				// increase weight as diameter breast height increases
+				'heatmap-weight': {
+				  property: 'dbh',
+				  type: 'exponential',
+				  stops: [
+					[1, 0],
+					[62, 1]
+				  ]
+				},
+				// increase intensity as zoom level increases
+				'heatmap-intensity': {
+				  stops: [
+					[11, 1],
+					[15, 3]
+				  ]
+				},
+				// assign color values be applied to points depending on their density
+				'heatmap-color': [
+				  'interpolate',
+				  ['linear'],
+				  ['heatmap-density'],
+				  0, 'rgba(236,222,239,0)',
+				  0.2, 'rgb(208,209,230)',
+				  0.4, 'rgb(166,189,219)',
+				  0.6, 'rgb(103,169,207)',
+				  0.8, 'rgb(28,144,153)'
+				],
+				// increase radius as zoom increases
+				'heatmap-radius': {
+				  stops: [
+					[11, 15],
+					[15, 20]
+				  ]
+				},
+				// decrease opacity to transition into the circle layer
+				'heatmap-opacity': {
+				  default: 1,
+				  stops: [
+					[14, 1],
+					[15, 0]
+				  ]
+				},
+			  }
+		}
+		, 
+		'admin-2-boundaries-dispute' );
+		
+		
+	  });
+
+
+	document.getElementById('slider').addEventListener('input', function(e) {
+	  var hour = parseInt(e.target.value);
+	  // update the map
+	  //map.setFilter('collisions', ['==', ['number', ['get', 'Hour']], hour]);
+	  filterHour = ['==', ['number', ['get', 'Hour']], hour];
+	  map.setFilter('collisions', ['all', filterHour, filterDay]);
+
+	  // converting 0-23 hour to AMPM format
+	  var ampm = hour >= 12 ? 'PM' : 'AM';
+	  var hour12 = hour % 12 ? hour % 12 : 12;
+
+	  // update text in the UI
+	  document.getElementById('active-hour').innerText = hour12 + ampm;
+	});
+
+	document.getElementById('filters').addEventListener('change', function(e) {
+	  var day = e.target.value;
+	  // update the map filter
+	  if (day === 'all') {
+		filterDay = ['!=', ['string', ['get', 'Day']], 'placeholder'];
+	  } 
+  
+	  else if (day === 'weekday') {
+		filterDay = ['match', ['get', 'Day'], ['Sat', 'Sun'], false, true];
+	  } else if (day === 'weekend') {
+		filterDay = ['match', ['get', 'Day'], ['Sat', 'Sun'], true, false];
+	  } else {
+		console.log('error');
+	  }
+	  map.setFilter('collisions', ['all', filterHour, filterDay]);
+	  
+	  //map.setFilter('collisions', ['all', filterDay]);
+	});
+
+	
+	//hide/show layers.
+	document.getElementById('onoff').addEventListener('change', function(e) {
+		var onoffvar = e.target.value;
+		if (onoffvar === 'pointdata')
+		{
+            map.setLayoutProperty('collisionsheatmap', 'visibility', 'none');
+            map.setLayoutProperty('collisions', 'visibility', 'visible');
+			
+		}
+		else if (onoffvar === 'heatmap') {
+			map.setLayoutProperty('collisionsheatmap', 'visibility', 'visible');
+			map.setLayoutProperty('collisions', 'visibility', 'none');
+		}
+		else {console.log('error');
+		}
+
+	});
+	
+		
+
+		
+
+
+
+
+
+</script>
+
+
+
+</html>
