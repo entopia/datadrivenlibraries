@@ -58,10 +58,10 @@
 	  width: 100%;
 	}
 
-	.colors {
-	  background: linear-gradient(to right, #2dc4b2, #3bb3c3, #669ec4, #8b88b6, #a2719b, #aa5e79);
-	  margin-bottom: 5px;
-	}
+    .colors {
+        //background: linear-gradient(to right, #2dc4b2, #3bb3c3, #669ec4, #8b88b6, #a2719b, #aa5e79);
+        background: linear-gradient(to right, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d);
+    }
 
 	.label {
 	  width: 15%;
@@ -74,54 +74,53 @@
 
 <body>
 	<div id='map'></div>
-	<div id='console'>
-		<h1>Libraries in the UK</h1>
-		<p>Data: <a href='https://data.gov.uk/dataset/782d6528-11bd-4ae0-ae47-63b456c84e76/public-libraries-in-england-basic-dataset'>Public libraries in England</a> in UK, Jul 2016</p>
-		  <div class='session'>
-		  <h2>Size of Libraries</h2> <!--casualties-->
-		  <div class='row colors'>
-		  </div>
-		  <div class='row labels'>
-			<div class='label'>0</div>
-			<div class='label'>1</div>
-			<div class='label'>2</div>
-			<div class='label'>3</div>
-			<div class='label'>4</div>
-			<div class='label'>5+</div>
-		  </div>
-		</div>
+    <div id='console'>
+        <h1>Libraries in the UK</h1>
+        <p>Data: <a href='https://data.gov.uk/dataset/782d6528-11bd-4ae0-ae47-63b456c84e76/public-libraries-in-england-basic-dataset'>Public libraries in England</a> in UK, Jul 2016</p>
+        <div class='session'>
+            <h2>Size of Libraries</h2> <!--casualties-->
+            <div class='row colors'>
+            </div>
+            <div class='row labels'>
+                <div class='label'>100</div>
+                <div class='label'>500</div>
+                <div class='label'>1000</div>
+                <div class='label'>1500</div>
+                <div class='label'>2000</div>
+                <div class='label'>3000+</div>
+            </div>
+        </div>
 
-		<div class='session' id='sliderbar'>
+
+        <div class='session' id='sliderbar'>
             <h2>Year: <label id='active-hour'>2016</label></h2>
-		    <!-- <h2>Hour: <label id='active-hour'>12PM</label></h2> -->
-		    <input id='slider' class='row' type='range' min='2011' max='2016' step='4' value='2016' />
+            <input id='slider' class='row' type='range' min='2011' max='2016' step='4' value='2016' />
 
-		    <div class='session'>
-		      <h2>Day of the week</h2>
-		      <div class='row' id='filters'>
-			    <input id='all' type='radio' name='toggle' value='all' checked='checked'>
-			    <label for='all'>All</label>
-			    <input id='weekday' type='radio' name='toggle' value='weekday'>
-			    <label for='weekday'>Weekday</label>
-			    <input id='weekend' type='radio' name='toggle' value='weekend'>
-			    <label for='weekend'>Weekend</label>
-		  </div>
-		</div>
+            <div class='session'>
+                <h2>Day of the week</h2>
+                <div class='row' id='filters'>
+                    <input id='all' type='radio' name='toggle' value='all' checked='checked'>
+                    <label for='all'>All</label>
+                    <input id='weekday' type='radio' name='toggle' value='weekday'>
+                    <label for='weekday'>Weekday</label>
+                    <input id='weekend' type='radio' name='toggle' value='weekend'>
+                    <label for='weekend'>Weekend</label>
+                </div>
+            </div>
+        </div>
 
-		<div class='session'>
-		  <h2>Type of visualisation</h2>
-		  <div class='row' id='onoff'>
-			<input id='pointdata' type='radio' name='toggle1' value='pointdata'  checked='checked'>
-			<label for='pointdata'>Pointdata</label>
-			<input id='heatmap' type='radio' name='toggle1' value='heatmap'>
-			<label for='heatmap'>Heatmap</label>
-		  </div>
-		</div>
+        <div class='session' id='togglebar'>
+            <h2>Type of visualisation</h2>
+            <div class='row' id='onoff'>
+                <input id='pointdata' type='radio' name='toggle1' value='pointdata' checked='checked'>
+                <label for='pointdata'>Pointdata</label>
+                <input id='heatmap' type='radio' name='toggle1' value='heatmap'>
+                <label for='heatmap'>Heatmap</label>
+            </div>
+        </div>
 
-</div>
-	
-	
-	</div>
+
+    </div>
 	
 </body>
 
@@ -243,39 +242,39 @@
 	  });
 
 
-	document.getElementById('slider').addEventListener('input', function(e) {
-	  var hour = parseInt(e.target.value);
+//	document.getElementById('slider').addEventListener('input', function(e) {
+//	  var hour = parseInt(e.target.value);
 	  // update the map
 	  //map.setFilter('collisions', ['==', ['number', ['get', 'Hour']], hour]);
-	  filterHour = ['==', ['number', ['get', 'Hour']], hour];
-	  map.setFilter('collisions', ['all', filterHour, filterDay]);
+	  //filterHour = ['==', ['number', ['get', 'Hour']], hour];
+	  //map.setFilter('collisions', ['all', filterHour, filterDay]);
 
 	  // converting 0-23 hour to AMPM format
-	  var ampm = hour >= 12 ? 'PM' : 'AM';
-	  var hour12 = hour % 12 ? hour % 12 : 12;
+	  //var ampm = hour >= 12 ? 'PM' : 'AM';
+	  //var hour12 = hour % 12 ? hour % 12 : 12;
 
 	  // update text in the UI
-	  document.getElementById('active-hour').innerText = hour12 + ampm;
-	});
+	  //document.getElementById('active-hour').innerText = hour12 + ampm;
+//	});
 
-	document.getElementById('filters').addEventListener('change', function(e) {
-	  var day = e.target.value;
+//	document.getElementById('filters').addEventListener('change', function(e) {
+//	  var day = e.target.value;
 	  // update the map filter
-	  if (day === 'all') {
-		filterDay = ['!=', ['string', ['get', 'Day']], 'placeholder'];
-	  } 
+	  //if (day === 'all') {
+		//filterDay = ['!=', ['string', ['get', 'Day']], 'placeholder'];
+	  //} 
   
-	  else if (day === 'weekday') {
-		filterDay = ['match', ['get', 'Day'], ['Sat', 'Sun'], false, true];
-	  } else if (day === 'weekend') {
-		filterDay = ['match', ['get', 'Day'], ['Sat', 'Sun'], true, false];
-	  } else {
-		console.log('error');
-	  }
-	  map.setFilter('collisions', ['all', filterHour, filterDay]);
+//	  else if (day === 'weekday') {
+//		filterDay = ['match', ['get', 'Day'], ['Sat', 'Sun'], false, true];
+//	  } else if (day === 'weekend') {
+//		filterDay = ['match', ['get', 'Day'], ['Sat', 'Sun'], true, false];
+//	  } else {
+//		console.log('error');
+//	  }
+//	  map.setFilter('collisions', ['all', filterHour, filterDay]);
 	  
 	  //map.setFilter('collisions', ['all', filterDay]);
-	});
+//	});
 
 	
 	//hide/show layers.
