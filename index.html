@@ -145,7 +145,7 @@
 	map.on('load', function() {
 		map.addLayer({
 			
-		  id: 'collisions',
+		  id: 'publiclibraries',
 		  type: 'circle',
 		  source: {
 			type: 'geojson',
@@ -176,7 +176,44 @@
 		  }
 		  
 		}, 
-		'admin-2-boundaries-dispute', );
+            'admin-2-boundaries-dispute');
+
+
+        map.addLayer({
+
+            id: 'researchlibraries',
+            type: 'circle',
+            source: {
+                type: 'geojson',
+                data: './ResearchLibrariesUK.geojson' // replace this with the url of your own geojson
+            },
+
+            //filter: ['all', filterHour, filterDay]
+            paint: {
+                'circle-radius': [
+                    'interpolate',
+                    ['linear'],
+                    ["zoom"], //data to visualise// we put zoom here so that its relevant to the zoom value and put the data in teh maximum bullet size.
+                    0, 2, 300000, ['number', ['get', 'area']]  // (min value of data, min value of map scale, maximum value of data, maximum value of map scale)
+                ],
+                'circle-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'area']],
+
+                    0, "#9AC0FE",//'#2DC4B2',
+                    3000, "#9AC0FE",
+                    7000, '#6B8ADB',
+                    25000, '#3D55B8',
+                    40000, '#1E32A1',
+                    70000, '#000F8A'
+                ],
+                'circle-opacity': 0.8
+            }
+
+        },
+            'admin-2-boundaries-dispute');
+
 		
 		map.addLayer({
 			id: 'collisionsheatmap',
@@ -238,6 +275,7 @@
 		, 
 		'admin-2-boundaries-dispute' );
 		
+
 		
 	  });
 
